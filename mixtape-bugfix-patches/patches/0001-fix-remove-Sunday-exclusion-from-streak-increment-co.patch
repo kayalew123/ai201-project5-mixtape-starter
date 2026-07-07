@@ -1,0 +1,35 @@
+From aba69bd05e08d82c7105acb722b23d3c10862227 Mon Sep 17 00:00:00 2001
+From: kayalew123 <kayalew123@users.noreply.github.com>
+Date: Tue, 7 Jul 2026 03:28:42 +0000
+Subject: [PATCH 1/7] fix: remove Sunday exclusion from streak increment
+ condition
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+update_listening_streak checked 'days_since_last == 1 and
+today.weekday() != 6' before incrementing. weekday() returns 6 for
+Sunday, so any consecutive-day listen that landed on a Sunday fell
+through to the else branch and reset the streak to 1. Consecutive-day
+detection needs no weekday condition at all — days_since_last == 1 is
+sufficient.
+---
+ services/streak_service.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/services/streak_service.py b/services/streak_service.py
+index 8cbd212..083a815 100644
+--- a/services/streak_service.py
++++ b/services/streak_service.py
+@@ -70,7 +70,7 @@ def update_listening_streak(user: User, now: datetime) -> None:
+     if days_since_last == 0:
+         # Already updated today — no change needed
+         return
+-    elif days_since_last == 1 and today.weekday() != 6:
++    elif days_since_last == 1:
+         user.listening_streak += 1
+     else:
+         user.listening_streak = 1
+-- 
+2.43.0
+
