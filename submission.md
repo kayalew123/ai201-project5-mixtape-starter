@@ -93,7 +93,7 @@ The brief also warns that the README can mislead: the README's example call chai
 
 ## Commit history
 
-*(Screenshot of `git log --oneline` on `bugfix/mixtape` inserted below — one `fix:` commit per bug plus one `test:` commit for the stretch regression tests.)*
+![git log --oneline on bugfix/mixtape](git-log.png)
 
 ```
 98fbedf test: add regression tests for listening-now recency and rating notifications
